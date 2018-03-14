@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/timeinitTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/notesTV"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="77dp"
+        android:text="2017-12-26 18:06:22已初始化" />
+
+    <Button
+        android:id="@+id/initBT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/stopBT"
+        android:layout_alignBottom="@+id/stopBT"
+        android:layout_marginEnd="14dp"
+        android:layout_toStartOf="@+id/notesTV"
+        android:text="初始化" />
+
+    <Button
+        android:id="@+id/stopBT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/timeinitTV"
+        android:layout_marginEnd="53dp"
+        android:layout_marginTop="30dp"
+        android:text="停止测试" />
+
+    <Button
+        android:id="@+id/updataBT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/initBT"
+        android:layout_marginBottom="106dp"
+        android:text="上传数据" />
+
+    <Button
+        android:id="@+id/helpBT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/stopBT"
+        android:layout_alignTop="@+id/updataBT"
+        android:text="帮助说明" />
+
+    <TextView
+        android:id="@+id/notesTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="21dp"
+        android:layout_toStartOf="@+id/stopBT"
+        android:text="正在测试中....." />
+
+    <TextView
+        android:id="@+id/timeupdataTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/helpBT"
+        android:layout_alignStart="@+id/updataBT"
+        android:layout_marginBottom="25dp"
+        android:text="2017-12-26 18:06:22 已上传成功" />
+
+    <Button
+        android:id="@+id/goonBT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/stopBT"
+        android:layout_centerHorizontal="true"
+        android:text="继续测试" />
+
+    <Button
+        android:id="@+id/downloadBT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/updataBT"
+        android:layout_alignEnd="@+id/goonBT"
+        android:text="下载工具" />
+
+</RelativeLayout>
