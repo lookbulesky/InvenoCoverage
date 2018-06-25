@@ -4,7 +4,7 @@ import android.util.Log;
 
 /**
  * Created by paix on 2017/12/19.
- * å¾®ä¿¡ ColorOs
+ * Î¢ĞÅ ColorOs
  */
 
 public class LogUtils {
@@ -21,15 +21,15 @@ public class LogUtils {
     }
 
     /**
-     * è®¾ç½®æ˜¯å¦æ˜¾ç¤ºlog
-     * @param enable true-æ˜¾ç¤º fase-ä¸æ˜¾ç¤º
+     * ÉèÖÃÊÇ·ñÏÔÊ¾log
+     * @param enable true-ÏÔÊ¾ fase-²»ÏÔÊ¾
      */
     public static void setLogEnable(boolean enable){
         LOG_ENABLE=enable;
     }
 
     /**
-     * è¿”å›æ˜¯å¦æ‰“å°log
+     * ·µ»ØÊÇ·ñ´òÓ¡log
      * @return
      */
     public static boolean getLogEnable(){
@@ -37,8 +37,8 @@ public class LogUtils {
     }
 
     /**
-     * è®¾ç½®æ˜¯å¦æ˜¾ç¤ºè¯¦ç»†log
-     * @param detatlEnable true-æ˜¾ç¤ºè¯¦ç»† false-ä¸æ˜¾ç¤ºè¯¦ç»†
+     * ÉèÖÃÊÇ·ñÏÔÊ¾ÏêÏ¸log
+     * @param detatlEnable true-ÏÔÊ¾ÏêÏ¸ false-²»ÏÔÊ¾ÏêÏ¸
      */
     public static void setLogDetatlEnable(boolean detatlEnable){
         LOG_DETATL_ENABLE=detatlEnable;

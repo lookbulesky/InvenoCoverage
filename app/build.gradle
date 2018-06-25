@@ -2,12 +2,8 @@
 apply plugin:'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
+//applicationId "com.paix.invenocoverage"
 
-
-version = "0.0.1"
-def siteUrl = 'https://github.com/Javen205/JPay'    // project homepage
-def gitUrl = 'https://github.com/Javen205/JPay.git' // project git
-group = "com.javen205.jpay"
 
 
 android {
@@ -25,6 +21,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug{
+            testCoverageEnabled=true
+        }
     }
 }
 
@@ -32,7 +31,7 @@ android {
 //    userOrg = 'lookbluesky '      //bintray注册的用户名
 //    groupId = 'com.look'         //compile引用时的第1部分groupId
 //    artifactId = 'bluesky'     //compile引用时的第2部分项目名
-//    publishVersion = '1.0.0'    //compile引用时的第3部分版本号
+//    publishVersion = '2.0.0'    //compile引用时的第3部分版本号
 //    desc = 'This is a jacocoCoverage extend library'
 //    website = 'https://github.com/lookbulesky/jacocoCoverage'
 //}
@@ -49,5 +48,85 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.1.0-beta4'
 //    implementation 'com.jakewharton:butterknife:8.8.1'
 //    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
-
 }
+
+
+
+version = "1.80.625"
+def siteUrl = 'https://github.com/lookbulesky/codeCoverage'    // project homepage
+def gitUrl = 'https://github.com/lookbulesky/codeCoverage.git' // project git
+group = "com.paix.invenocoverage"
+
+
+
+// 根节点添加
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            project {
+                packaging 'aar'
+                name 'codeCoverage For Android'
+                url siteUrl
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'lookbulesky'
+                        name 'paix.lee'
+                        email '123051922@qq.com'
+                    }
+                }
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+                }
+            }
+        }
+    }
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+    configurations = ['archives']
+    println user
+    println key
+    pkg {
+        repo = "maven"
+        name = "codeCoverage"                // project name in jcenter
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = ["Apache-2.0"]
+        publish = true
+    }
+}
+

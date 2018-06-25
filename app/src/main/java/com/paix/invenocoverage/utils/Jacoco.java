@@ -11,21 +11,21 @@ import java.io.OutputStreamWriter;
 
 /**
  * Created by paix on 2017/12/22.
- * å¾®ä¿¡ ColorOs
+ * Î¢ĞÅ ColorOs
  */
 
 public class Jacoco {
 
-    //ecæ–‡ä»¶çš„è·¯å¾„
+    //ecÎÄ¼şµÄÂ·¾¶
     private static String DEFAULT_COVERAGE_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/invenocoverage.ec";
 
-    //é¡¹ç›®è·¯å¾„
+    //ÏîÄ¿Â·¾¶
     private static String PROJECT_PATH;
 
     /**
-     * åˆå§‹åŒ–
-     * @param projectPath  'é¡¹ç›®è·¯å¾„' + '/app/build/outputs/code-coverage/'
-     * @param isDebug æ˜¯å¦æ‰“å¼€log
+     * ³õÊ¼»¯
+     * @param projectPath  'ÏîÄ¿Â·¾¶' + '/app/build/outputs/code-coverage/'
+     * @param isDebug ÊÇ·ñ´ò¿ªlog
      */
     public static void init(String projectPath, boolean isDebug){
         PROJECT_PATH = projectPath + "  /app/build/outputs/code-coverage/";
@@ -33,9 +33,9 @@ public class Jacoco {
     }
 
     /**
-     * ç”Ÿæˆecæ–‡ä»¶
+     * Éú³ÉecÎÄ¼ş
      *
-     * @param isNew æ˜¯å¦é‡æ–°åˆ›å»ºecæ–‡ä»¶
+     * @param isNew ÊÇ·ñÖØĞÂ´´½¨ecÎÄ¼ş
      */
     public static void generateEcFile(boolean isNew) {
         if (!LogUtils.getLogEnable())
@@ -43,7 +43,7 @@ public class Jacoco {
 
         OutputStream out = null;
         File mCoverageFilePath = new File(DEFAULT_COVERAGE_FILE_PATH);
-        File file = new File(Environment.getExternalStorageDirectory().getPath() +"/001ping.li_2.txt");
+       // File file = new File(Environment.getExternalStorageDirectory().getPath() +"/001ping.li_2.txt");
 
         try {
             if (isNew && mCoverageFilePath.exists()) {
@@ -59,11 +59,11 @@ public class Jacoco {
                     .invoke(null);
             out.write((byte[]) agent.getClass().getMethod("getExecutionData", boolean.class)
                     .invoke(agent, false));
-            file.createNewFile();
-            FileOutputStream outputStream = new FileOutputStream(file);//æ‰“å¼€æ–‡ä»¶è¾“å‡ºæµ
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream));//å†™å…¥åˆ°ç¼“å­˜æµ
-            writer.write("è¿™é‡Œæ˜¯è¦å†™å…¥åˆ°æ–‡ä»¶çš„æ•°æ®");//ä»ä»ç¼“å­˜æµå†™å…¥
-            writer.close();//å…³é—­æµ
+           // file.createNewFile();
+            //FileOutputStream outputStream = new FileOutputStream(file);//´ò¿ªÎÄ¼şÊä³öÁ÷
+            //BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream));//Ğ´Èëµ½»º´æÁ÷
+           // writer.write("ÕâÀïÊÇÒªĞ´Èëµ½ÎÄ¼şµÄÊı¾İ");//´Ó´Ó»º´æÁ÷Ğ´Èë
+            //writer.close();//¹Ø±ÕÁ÷
         } catch (Exception e) {
             LogUtils.d("inveno_Jacoco_generateEcFile: " + e.getMessage());
         } finally {
@@ -81,8 +81,8 @@ public class Jacoco {
 
 
     /**
-     * å¯¼å‡ºjacocoç”Ÿæˆçš„ecæ–‡ä»¶åˆ°é¡¹ç›®ç›¸å…³ç›®å½•ä¸‹
-     * @return adb å‘½ä»¤
+     * µ¼³öjacocoÉú³ÉµÄecÎÄ¼şµ½ÏîÄ¿Ïà¹ØÄ¿Â¼ÏÂ
+     * @return adb ÃüÁî
      */
     public static String getAdbPullCmd(){
         String adb = "adb pull " + DEFAULT_COVERAGE_FILE_PATH + " " + PROJECT_PATH;

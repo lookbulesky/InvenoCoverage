@@ -8,7 +8,7 @@ import android.util.DisplayMetrics;
 
 /**
  * Created by paix on 2017/12/20.
- * å¾®ä¿¡ ColorOs
+ * Î¢ĞÅ ColorOs
  */
 
 public class DevicesInfo {
@@ -16,9 +16,9 @@ public class DevicesInfo {
     private static Resources resources;
 
     /**
-     * æ£€æŸ¥ç½‘ç»œæ˜¯å¦è¿æ¥
-     * @param context å…¨å±€context
-     * @return å·²è¿æ¥true  æœªè¿æ¥false
+     * ¼ì²éÍøÂçÊÇ·ñÁ¬½Ó
+     * @param context È«¾Öcontext
+     * @return ÒÑÁ¬½Ótrue  Î´Á¬½Ófalse
      */
     public static boolean checkNetworkConnect(Context context){
         if(context != null){

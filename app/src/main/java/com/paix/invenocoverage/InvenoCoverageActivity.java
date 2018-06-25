@@ -1,118 +1,112 @@
 package com.paix.invenocoverage;
 
-import android.content.Context;
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
-import android.provider.Settings;
-import android.support.v7.app.AlertDialog;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.paix.invenocoverage.utils.Jacoco;
-import com.paix.invenocoverage.utils.PermisionUtils;
-import com.paix.invenocoverage.utils.ToastUtils;
 
-import java.io.BufferedWriter;
 import java.io.DataOutputStream;
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
-
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class InvenoCoverageActivity extends AppCompatActivity {
-
-    private Context context;
-    private static String DEFAULT_COVERAGE_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/invenocoverage.ec";
-    TextView notesTV;
-    TextView timeinitTV;
-    TextView timeupdaTV;
-    Button initBT,updataBT,stopBT,helpBT,downloadBT,goonBT;
+    EditText et_ecName;
+    Button bt_upLoad;
+    Button bt_help;
+    TextView tv_history;
+    String ECfileName="";
+    TextView tv1;
+    TextView tv_ecName;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invenocoverage);
-        PermisionUtils.verifyStoragePermissions(this);
-        context = getApplicationContext();
-        notesTV = (TextView)findViewById(R.id.notesTV);
-        timeinitTV = (TextView)findViewById(R.id.timeinitTV);
-        timeupdaTV = (TextView)findViewById(R.id.timeupdataTV);
-        initBT =(Button)findViewById(R.id.initBT);
-        updataBT =(Button)findViewById(R.id.updataBT);
-        stopBT =(Button)findViewById(R.id.stopBT);
-        helpBT =(Button)findViewById(R.id.helpBT);
-        downloadBT =(Button)findViewById(R.id.downloadBT);
-        goonBT =(Button)findViewById(R.id.goonBT);
-        initBT.setOnClickListener(new View.OnClickListener() {
+        init();
+    }
+    public void init(){
+        ECfileName = clearnStr(Build.MODEL+Build.VERSION.RELEASE);
+        et_ecName = (EditText)findViewById(R.id.et_ecName);
+        bt_upLoad = (Button)findViewById(R.id.bt_upLoad);
+        bt_help = (Button)findViewById(R.id.bt_help);
+        tv_history=(TextView)findViewById(R.id.tv_history);
+        tv1 = (TextView)findViewById(R.id.tv1);
+        tv_ecName = (TextView)findViewById(R.id.tv_ecName);
+        bt_upLoad.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setInitBT();
+                String str = et_ecName.getText().toString().trim();
+                if(str!=""){
+                    ECfileName = str;
+                }
+                Jacoco.generateEcFile(false);
+                upLoadEcFile();
             }
         });
-        updataBT.setOnClickListener(new View.OnClickListener() {
+        bt_help.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setUpdataBT();
+                helpView();
             }
         });
-        stopBT.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setStopBT();
-            }
-        });
-        helpBT.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setHelpBT();
-            }
-        });
-        downloadBT.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setDownloadBT();
-            }
-        });
-        goonBT.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setGoonBT();
-            }
-        });
+        et_ecName.setText(ECfileName);
+        et_ecName.setSelection(et_ecName.getText().toString().length());
+        tv_history.setText(getStateTime());
     }
 
 
-
-    public void setInitBT(){
-//        ToastUtils.showShort(context, "init");
-//        ToastUtils.showShort(InvenoCoverageActivity.this, "init2");
-//        PermisionUtils.verifyStoragePermissions(this);
-        //åˆ›å»ºæ–‡ä»¶
-            File file = new File("/sdcard/001ping.li.txt");//æ–‡ä»¶ä½ç½®
-        try {
-            FileOutputStream outputStream = new FileOutputStream(file);//æ‰“å¼€æ–‡ä»¶è¾“å‡ºæµ
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream));//å†™å…¥åˆ°ç¼“å­˜æµ
-            writer.write("è¿™é‡Œæ˜¯è¦å†™å…¥åˆ°æ–‡ä»¶çš„æ•°æ®");//ä»ä»ç¼“å­˜æµå†™å…¥
-            writer.close();//å…³é—­æµ
-            ToastUtils.showShort(context,"è¾“å‡ºæˆåŠŸ");
-        }
-        catch(Exception exception) {
-            ToastUtils.showShort(context,"è¾“å‡ºå¤±è´¥"+exception.toString());
-        }
+    private String clearnStr(String str){
+        str=str.replace(" ","");
+        str=str.replace("_","");
+        str=str.replace("-","");
+        str=str.replace("\\","");
+        str=str.replace("/","");
+        str=str.replace(":","");
+        str=str.replace("*","");
+        str=str.replace("?","");
+        str=str.replace("\"","");
+        str=str.replace("<","");
+        str=str.replace(">","");
+        str=str.replace("|","");
+        return str;
+    }
+    private void helpView() {
+        new AlertDialog.Builder(this)
+                .setTitle("more...")
+                .setMessage("ÏêÏ¸ËµÃ÷¼û192.168.1.244")
+                .setPositiveButton("Ç°Íù", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(InvenoCoverageActivity.this,webviewActivity.class);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("È¡Ïû", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create()
+                .show();
     }
 
-    public void setUpdataBT(){
-//        ToastUtils.showShort(context, "updata");
+    private void upLoadEcFile() {
         mHandler = new Handler();
         new Thread(){
             @Override
@@ -121,65 +115,31 @@ public class InvenoCoverageActivity extends AppCompatActivity {
                 uploadFile();
             }
         }.start();
+        savaStateTime();
+        tv_history.setText(getStateTime());
+        Toast.makeText(InvenoCoverageActivity.this,"upload",Toast.LENGTH_SHORT).show();
     }
 
-
-    public void setStopBT(){
-        Jacoco.generateEcFile(false);
-        ToastUtils.showShort(context, "stop");
+    private void savaStateTime() {
+        SharedPreferences.Editor editor = getSharedPreferences("timeState",MODE_PRIVATE).edit();
+        editor.putLong("time",System.currentTimeMillis());
+        editor.commit();
+    }
+    private String getStateTime(){
+        SharedPreferences sp =getSharedPreferences("timeState",MODE_PRIVATE);
+        long lon = sp.getLong("time",0);
+        return getDateToString(lon,"yyyy/MM/dd HH:mm:ss");
     }
 
-
-    public void setHelpBT(){
-        ToastUtils.showShort(context, "help");
+    private  String getDateToString(long time, String pattern) {
+        if(time==0)
+            return "Î´ÉÏ´«¹ıÊı¾İ";
+        Date date = new Date(time);
+        SimpleDateFormat format = new SimpleDateFormat(pattern);
+        return "×î½üÒ»´ÎÉÏ´«Êı¾İÊ±¼ä£º\n"+format.format(date);
     }
 
-    public void setDownloadBT(){
-
-    }
-
-    public void setGoonBT(){
-
-    }
-
-    public void startFloatWindow(){
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (Settings.canDrawOverlays(InvenoCoverageActivity.this)) {
-                Intent intent = new Intent(InvenoCoverageActivity.this, BlacklistService.class);
-                ToastUtils.showShort(InvenoCoverageActivity.this,"å·²å¼€å¯Toucher");
-                startService(intent);
-                finish();
-            } else {
-                //è‹¥æ²¡æœ‰æƒé™ï¼Œæç¤ºè·å–.
-                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
-                ToastUtils.showShort(InvenoCoverageActivity.this,"éœ€è¦å–å¾—æƒé™ä»¥ä½¿ç”¨æ‚¬æµ®çª—");
-                startActivity(intent);
-            }
-        } else {
-            //SDKåœ¨23ä»¥ä¸‹ï¼Œä¸ç”¨ç®¡.
-            Intent intent = new Intent(InvenoCoverageActivity.this, BlacklistService.class);
-            startService(intent);
-            finish();
-        }
-    }
-    boolean coveragefileExist(){
-        File file = new File(DEFAULT_COVERAGE_FILE_PATH);
-        if(file.exists()){
-            return true;
-        }
-        return false;
-    }
-
-
-        private String newName = "invenocoverage.ec";
-//    private String newName = "coverage.ec";
-        private String uploadFile = "/sdcard/invenocoverage.ec";// è¦ä¸Šä¼ çš„æ–‡ä»¶
-//    private String uploadFile = "/sdcard/coverage.ec";// è¦ä¸Šä¼ çš„æ–‡ä»¶
-    private String actionUrl = "http://192.168.1.244:8080/Tea/test/UploadServlet";
-
-
-
-    /* ä¸Šä¼ æ–‡ä»¶è‡³Serverçš„æ–¹æ³• */
+    /* ÉÏ´«ÎÄ¼şÖÁServerµÄ·½·¨ */
     private void uploadFile() {
         String end = "\r\n";
         String twoHyphens = "--";
@@ -187,12 +147,12 @@ public class InvenoCoverageActivity extends AppCompatActivity {
         try {
             URL url = new URL(actionUrl);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            /* å…è®¸Inputã€Outputï¼Œä¸ä½¿ç”¨Cache */
+            /* ÔÊĞíInput¡¢Output£¬²»Ê¹ÓÃCache */
             con.setDoInput(true);
             con.setDoOutput(true);
             con.setUseCaches(false);
 
-            // è®¾ç½®httpè¿æ¥å±æ€§
+            // ÉèÖÃhttpÁ¬½ÓÊôĞÔ
             con.setRequestMethod("POST");
             con.setRequestProperty("Connection", "Keep-Alive");
             con.setRequestProperty("Charset", "UTF-8");
@@ -202,18 +162,18 @@ public class InvenoCoverageActivity extends AppCompatActivity {
             DataOutputStream ds = new DataOutputStream(con.getOutputStream());
             ds.writeBytes(twoHyphens + boundary + end);
             ds.writeBytes("Content-Disposition: form-data; "
-                    + "name=\"file1\";filename=\"" + newName + "\"" + end);
+                    + "name=\"file1\";filename=\"" + ECfileName + "\"" + end);
             ds.writeBytes(end);
 
-            // å–å¾—æ–‡ä»¶çš„FileInputStream
+            // È¡µÃÎÄ¼şµÄFileInputStream
             FileInputStream fStream = new FileInputStream(uploadFile);
-            /* è®¾ç½®æ¯æ¬¡å†™å…¥1024bytes */
+            /* ÉèÖÃÃ¿´ÎĞ´Èë1024bytes */
             int bufferSize = 1024;
             byte[] buffer = new byte[bufferSize];
             int length = -1;
-            /* ä»æ–‡ä»¶è¯»å–æ•°æ®è‡³ç¼“å†²åŒº */
+            /* ´ÓÎÄ¼ş¶ÁÈ¡Êı¾İÖÁ»º³åÇø */
             while ((length = fStream.read(buffer)) != -1) {
-                /* å°†èµ„æ–™å†™å…¥DataOutputStreamä¸­ */
+                /* ½«×ÊÁÏĞ´ÈëDataOutputStreamÖĞ */
                 ds.write(buffer, 0, length);
             }
             ds.writeBytes(end);
@@ -221,24 +181,21 @@ public class InvenoCoverageActivity extends AppCompatActivity {
 
             fStream.close();
             ds.flush();
-            /* å–å¾—Responseå†…å®¹ */
+            /* È¡µÃResponseÄÚÈİ */
             InputStream is = con.getInputStream();
             int ch;
             StringBuffer b = new StringBuffer();
             while ((ch = is.read()) != -1) {
                 b.append((char) ch);
             }
-            /* å°†Responseæ˜¾ç¤ºäºDialog */
             b2=b;
             mHandler.post(new Thread(){
                 @Override
                 public void run() {
                     super.run();
-                    showDialog("ä¸Šä¼ æˆåŠŸ" + b2.toString().trim());
+                    showDialog("ÉÏ´«³É¹¦" + b2.toString().trim());
                 }
             });
-
-            /* å…³é—­DataOutputStream */
             ds.close();
         } catch (Exception e) {
             e2=e;
@@ -246,7 +203,7 @@ public class InvenoCoverageActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     super.run();
-                    showDialog("ä¸Šä¼ å¤±è´¥" + e2);
+                    showDialog("ÉÏ´«Ê§°Ü" + e2);
                 }
             });
 
@@ -255,11 +212,13 @@ public class InvenoCoverageActivity extends AppCompatActivity {
     public Exception e2;
     public Handler mHandler;
     public StringBuffer b2;
-    /* æ˜¾ç¤ºDialogçš„method */
+    private String uploadFile = "/sdcard/invenocoverage.ec";
+    private String actionUrl = "http://192.168.9.126:8080/Tea/test/UploadServlet";
+
     private void showDialog(String mess) {
-        new AlertDialog.Builder(InvenoCoverageActivity.this).setTitle("Message")
+        new android.support.v7.app.AlertDialog.Builder(InvenoCoverageActivity.this).setTitle("Message")
                 .setMessage(mess)
-                .setNegativeButton("ç¡®å®š", new DialogInterface.OnClickListener() {
+                .setNegativeButton("È·¶¨", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                     }
                 }).show();
