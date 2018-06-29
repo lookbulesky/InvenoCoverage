@@ -4,4 +4,12 @@
     <string name="bt_upLoad">一键上传代码覆盖率数据</string>
     <string name="bt_help">more...</string>
     <string name="digits">abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ.</string>
+    <string name="detail_description">详细说明见 192.168.1.244</string>
+    <string name="go">前往</string>
+    <string name="cancle">取消</string>
+    <string name="errodata">未上传过数据</string>
+    <string name="recentelydata">最近一次上传数据时间：</string>
+    <string name="uploadsucess">上传成功</string>
+    <string name="upfail">上传失败</string>
+    <string name="ok">确定</string>
 </resources>

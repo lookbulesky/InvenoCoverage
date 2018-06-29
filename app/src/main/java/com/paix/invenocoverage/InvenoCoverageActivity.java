@@ -88,15 +88,15 @@ public class InvenoCoverageActivity extends AppCompatActivity {
     private void helpView() {
         new AlertDialog.Builder(this)
                 .setTitle("more...")
-                .setMessage("详细说明见192.168.1.244")
-                .setPositiveButton("前往", new DialogInterface.OnClickListener() {
+                .setMessage(getResources().getString(R.string.detail_description))
+                .setPositiveButton(getResources().getString(R.string.go), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Intent intent = new Intent(InvenoCoverageActivity.this,webviewActivity.class);
                         startActivity(intent);
                     }
                 })
-                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getResources().getString(R.string.cancle), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
@@ -133,10 +133,10 @@ public class InvenoCoverageActivity extends AppCompatActivity {
 
     private  String getDateToString(long time, String pattern) {
         if(time==0)
-            return "未上传过数据";
+            return getResources().getString(R.string.errodata);
         Date date = new Date(time);
         SimpleDateFormat format = new SimpleDateFormat(pattern);
-        return "最近一次上传数据时间：\n"+format.format(date);
+        return getResources().getString(R.string.recentelydata)+"\n"+format.format(date);
     }
 
     /* 上传文件至Server的方法 */
@@ -193,7 +193,7 @@ public class InvenoCoverageActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     super.run();
-                    showDialog("上传成功" + b2.toString().trim());
+                    showDialog(getResources().getString(R.string.uploadsucess) + b2.toString().trim());
                 }
             });
             ds.close();
@@ -203,7 +203,7 @@ public class InvenoCoverageActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     super.run();
-                    showDialog("上传失败" + e2);
+                    showDialog(getResources().getString(R.string.upfail) + e2);
                 }
             });
 
@@ -218,7 +218,7 @@ public class InvenoCoverageActivity extends AppCompatActivity {
     private void showDialog(String mess) {
         new android.support.v7.app.AlertDialog.Builder(InvenoCoverageActivity.this).setTitle("Message")
                 .setMessage(mess)
-                .setNegativeButton("确定", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                     }
                 }).show();

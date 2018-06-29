@@ -52,7 +52,7 @@ dependencies {
 
 
 
-version = "1.80.625"
+version = "1.80.629"
 def siteUrl = 'https://github.com/lookbulesky/codeCoverage'    // project homepage
 def gitUrl = 'https://github.com/lookbulesky/codeCoverage.git' // project git
 group = "com.paix.invenocoverage"
