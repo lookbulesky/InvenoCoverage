@@ -11,7 +11,6 @@ public class InvenoCoverageBroadcast extends BroadcastReceiver{
     String TAG = "InvenoCoverageBroadcast";
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.i(TAG, "onReceive: packageName="+intent.getStringExtra("packageName"));
         String action = intent.getAction();
         if(action.equals("com.paix.invenocoverage.broadcast.InvenoCoverageBroadcast")){
             Intent intent1 = new Intent(context,InvenoCoverageService.class);

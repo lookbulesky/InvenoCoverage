@@ -2,7 +2,6 @@ package service;
 
 import android.app.Service;
 import android.content.Intent;
-import android.os.Handler;
 import android.os.IBinder;
 import android.text.TextUtils;
 import android.util.Log;
@@ -39,24 +38,25 @@ public class InvenoCoverageService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        String packageName;
+        final String packageName;
         if(TextUtils.isEmpty(intent.getStringExtra("packageName"))){
             packageName="empty";
         }else {
             packageName=intent.getStringExtra("packageName");
         }
-        Log.i(TAG,"packageName="+packageName);
+        Log.i(TAG,"onStartCommand-start  packageName="+packageName);
         if(packageName.equals(getPackageName())){
             final int forIn = intent.getIntExtra("forIn",0);
             filePath = this.getFilesDir().getAbsolutePath()+"/invenocoverage.ec";
             doWhat = intent.getStringExtra("doWhat");
-            Log.i(TAG,"doWhat="+doWhat+" forIn"+forIn);
             if(doWhat.equals("run")){
                 run=true;
+                SendBroadcast("run",run,"run");
                 new Thread(){
                     @Override
                     public void run() {
                         while (run){
+                            Log.i(TAG,"onStartCommand-run  run="+run+" doWhat= "+doWhat+" forIn= "+forIn+ " packageName= "+packageName);
                             if(forIn<1){
                                 return;
                             }
@@ -80,8 +80,13 @@ public class InvenoCoverageService extends Service {
                 clearEc();
             }else if(doWhat.equals("stop")){
                 run=false;
+                SendBroadcast("stop",run,"stop");
+            }else if(doWhat.equals("done")){
+                run=false;
+                SendBroadcast("done",run,"done");
             }
         }
+        Log.i(TAG,"onStartCommand-end run="+run+" doWhat= "+doWhat+ " packageName= "+packageName);
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -147,14 +152,15 @@ public class InvenoCoverageService extends Service {
             }
             b2=b;
             ds.close();
-            SendBroadcast(b2.toString().trim(),true,"run");
+            SendBroadcast(b2.toString().trim(),true,"upload");
 
         } catch (Exception e) {
-            SendBroadcast(e.toString(),false,"run");
+            SendBroadcast(e.toString(),false,"upload");
         }
     }
 
     private void SendBroadcast(String message,Boolean success,String feature){
+        Log.i(TAG,"SendBroadcast() message= "+ message+" success= "+success+" feature="+feature);
         Intent intent = new Intent("com.paix.inveno.ertop.ReceiveJacocoBroadcast");
         intent.putExtra("message",message);
         intent.putExtra("success",success);
